@@ -21,9 +21,6 @@ import javax.persistence.EntityManagerFactory;
 @ContextConfiguration(classes = {DomainConfiguration.class})
 public class SchemaTest {
     @Autowired
-    private EntityManagerFactory ef;
-
-    @Autowired
     private Environment env;
 
     private Configuration buildConfiguration() {
@@ -48,31 +45,11 @@ public class SchemaTest {
 
         final boolean printInConsole = true;
         final boolean executeToDb = false;
+        schemaExport.setOutputFile("export.sql");
+
         System.out.println("\n=========== SCHEMA =============\n");
-        schemaExport.execute(printInConsole, executeToDb, true, true);
+        schemaExport.create(false, false);
+//        schemaExport.execute(printInConsole, executeToDb, true, true);
         System.out.println("\n========== END SCHEMA ===========\n");
     }
-
-//    @Test
-//    public void getSchema() throws Exception {
-//        EntityManager em = ef.createEntityManager();
-//        System.out.println("\n=========== SCHEMA =============\n");
-//
-//        assertThat(em, is(notNullValue()));
-//        assertThat(em.getDelegate() instanceof Session, is(true));
-//        Session session = (Session) (em.getDelegate());
-//        assertThat(session, is(notNullValue()));
-//
-//        SessionFactoryImpl sessionFactory = (SessionFactoryImpl) session.getSessionFactory();
-//        assertThat(sessionFactory, is(notNullValue()));
-//
-//        Field exp = SessionFactoryImpl.class.getDeclaredField("schemaExport");
-//        exp.setAccessible(true);
-//        SchemaExport export = (SchemaExport) exp.get(sessionFactory);
-//        assertThat(export, is(notNullValue()));
-//
-//        export.execute(true, false, false, true);
-//        System.out.println("\n========== END SCHEMA ===========\n");
-//        em.close();
-//    }
 }

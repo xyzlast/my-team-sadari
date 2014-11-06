@@ -1,5 +1,6 @@
 package me.xyzlast.domain.entities;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -15,7 +16,7 @@ import java.util.List;
 public class Game extends BaseEntity {
     private Date date;
 
-    @OneToMany(mappedBy = "game")
+    @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<PlayerResult> results = new ArrayList<>();
     private String matchingNumber;
 

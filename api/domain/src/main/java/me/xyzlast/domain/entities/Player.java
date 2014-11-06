@@ -12,6 +12,7 @@ import java.util.Date;
 @Table(name = "Player")
 public class Player extends BaseEntity {
     private String name;
+    private int defaultAmount;
 
     public String getName() {
         return name;
@@ -19,5 +20,20 @@ public class Player extends BaseEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getDefaultAmount() {
+        return defaultAmount;
+    }
+
+    public void setDefaultAmount(int defaultAmount) {
+        this.defaultAmount = defaultAmount;
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "name='" + name + '\'' +
+                '}';
     }
 }
