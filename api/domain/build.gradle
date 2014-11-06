@@ -18,8 +18,7 @@ dependencies {
     compile 'com.zaxxer:HikariCP:2.0.1'
     compile 'org.javassist:javassist:3.18.2-GA'
 
-    compile 'com.microsoft:mssqljdbc:4.0'
-
+    compile 'mysql:mysql-connector-java:5.1.33'
     compile 'org.gridgain:gridgain-hibernate:6.1.9'
 }
 

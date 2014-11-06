@@ -11,10 +11,11 @@ import java.util.List;
  * Created by ykyoon on 14. 11. 6.
  */
 @Entity
-@Table(name = "Games")
+@Table(name = "Game")
 public class Game extends BaseEntity {
     private Date date;
-    @OneToMany
+
+    @OneToMany(mappedBy = "game")
     private List<PlayerResult> results = new ArrayList<>();
     private String matchingNumber;
 

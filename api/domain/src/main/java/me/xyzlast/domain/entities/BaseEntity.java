@@ -12,13 +12,21 @@ import java.util.Date;
 public class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @Type(type = "yes_no")
     private boolean deleted;
 
     private Date createDate;
     private Date updateDate;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public boolean isDeleted() {
         return deleted;
@@ -32,7 +40,6 @@ public class BaseEntity {
         return createDate;
     }
 
-    @PrePersist
     public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
@@ -41,9 +48,19 @@ public class BaseEntity {
         return updateDate;
     }
 
-    @PreUpdate
-    @PrePersist
     public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    @PrePersist
+    public void setPrePersist() {
+        Date now = new Date();
+        this.createDate = now;
+        this.updateDate = now;
+    }
+
+    @PreUpdate
+    public void setPreUpdate() {
+        this.updateDate = new Date();
     }
 }

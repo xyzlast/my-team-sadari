@@ -9,7 +9,7 @@ import java.util.Date;
  * Created by ykyoon on 14. 11. 6.
  */
 @Entity
-@Table(name = "Players")
+@Table(name = "Player")
 public class Player extends BaseEntity {
     private String name;
 

@@ -3,11 +3,13 @@ package me.xyzlast.domain.entities;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
  * Created by ykyoon on 14. 11. 6.
  */
 @Entity
+@Table
 public class PlayerResult extends BaseEntity {
 
     @ManyToOne
