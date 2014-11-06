@@ -1,0 +1,110 @@
+apply plugin: 'war'
+apply plugin: 'org.akhikhl.gretty'
+apply plugin: 'cargo'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'org.gradle.api.plugins:gradle-cargo-plugin:1.5'
+        classpath 'org.akhikhl.gretty:gretty:1.1.1'
+    }
+}
+
+
+configurations {
+    all*.exclude group: 'org.hibernate.javax.persistence', module: 'hibernate-jpa-2.0-api'
+}
+
+dependencies {
+    compile project(":domain")
+    compile "org.hibernate:hibernate-core:${rootProject.ext.hibernateVersion}"
+    compile "org.springframework:spring-webmvc:${rootProject.ext.springVersion}"
+    compile "org.springframework.security:spring-security-web:${rootProject.ext.springsecurityVersion}"
+    compile "org.springframework.security:spring-security-config:${rootProject.ext.springsecurityVersion}"
+    compile "org.springframework.security:spring-security-ldap:${rootProject.ext.springsecurityVersion}"
+    compile "org.springframework.security:spring-security-openid:${rootProject.ext.springsecurityVersion}"
+    compile "org.springframework:spring-websocket:${rootProject.ext.springVersion}"
+    compile "org.springframework:spring-messaging:${rootProject.ext.springVersion}"
+
+    /*
+    fileupload components
+     */
+    compile 'commons-fileupload:commons-fileupload:1.3.1'
+    compile group: 'commons-io', name: 'commons-io', version: '2.4'
+    compile group: 'commons-collections', name: 'commons-collections', version: '3.2.1'
+
+    compile group: 'org.apache.poi', name: 'poi', version: '3.9'
+    compile group: 'net.sourceforge.jexcelapi', name: 'jxl', version: '2.6.12'
+    compile group: 'com.itextpdf', name: 'itext-asian', version: '5.2.0'
+    compile group: 'com.itextpdf', name: 'itextpdf', version: '5.4.0'
+    compile group: 'com.itextpdf.tool', name: 'xmlworker', version: '5.4.1'
+    compile('org.xhtmlrenderer:flying-saucer-pdf-itext5:9.0.4') {
+        exclude(group: 'com.itextpdf')
+    }
+    compile 'com.microsoft:mssqljdbc:4.0'
+    compile 'org.apache.tomcat:tomcat-websocket:8.0.8'
+
+    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+    providedCompile 'javax.websocket:javax.websocket-api:1.0'
+    providedCompile 'javax.servlet:jsp-api:2.0'
+
+
+    def cargoVersion = '1.4.9'
+    cargo "org.codehaus.cargo:cargo-core-uberjar:$cargoVersion",
+            "org.codehaus.cargo:cargo-ant:$cargoVersion"
+}
+
+gretty {
+    servletContainer = 'tomcat8'
+    contextPath = "fms-api"
+    managedClassReload = false
+    recompileOnSourceChange = false
+    reloadOnClassChange = false
+    reloadOnConfigChange = false
+    reloadOnLibChange = false
+    host = 'localhost'
+    httpPort = 8080
+}
+
+//cargo {
+//    containerId = 'tomcat8x'
+//    port = 9080
+//}
+//
+//cargoRedeployRemote {
+//    dependsOn war
+//}
+//
+//cargoDeployRemote {
+//    dependsOn war
+//}
+
+//if(project.hasProperty('target')) {
+//    dependencies {
+//        compile(group: 'net.bull.javamelody', name: 'javamelody-core', version: '1.52.0')
+//        compile(group: 'com.lowagie', name: 'itext', version: '2.1.7') {
+//            exclude(module: 'bcmail-jdk14')
+//            exclude(module: 'bcprov-jdk14')
+//            exclude(module: 'bctsp-jdk14')
+//        }
+//    }
+//
+//    if(project.target.equals('pub')) {
+//        war {
+//            webXml = file('src/main/webxml/pub-web.xml')
+//        }
+//        cargo {
+//            deployable {
+//                context = "/fms-api"
+//            }
+//            remote {
+//                hostname = '192.168.13.210'
+//                username = 'ykyoon'
+//                password = 'qwer12#$'
+//            }
+//        }
+//    }
+//}

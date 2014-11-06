@@ -1,0 +1,63 @@
+dependencies {
+    compile "org.hibernate:hibernate-core:${rootProject.ext.hibernateVersion}"
+    compile "org.hibernate:hibernate-entitymanager:${rootProject.ext.hibernateVersion}"
+    compile "org.hibernate:hibernate-ehcache:${rootProject.ext.hibernateVersion}"
+    compile "org.hibernate:hibernate-validator:5.1.2.Final"
+    compile 'org.hibernate:hibernate-search-engine:4.5.1.Final'
+
+    compile("com.mysema.querydsl:querydsl-core:$rootProject.ext.querydslVersion")
+    compile("com.mysema.querydsl:querydsl-jpa:$rootProject.ext.querydslVersion")
+    compile("com.mysema.querydsl:querydsl-sql:$rootProject.ext.querydslVersion")
+    provided("com.mysema.querydsl:querydsl-apt:$rootProject.ext.querydslVersion") {
+        exclude group: 'com.google.guava'
+    }
+    compile "org.springframework.data:spring-data-jpa:$rootProject.ext.springjpaVersion"
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version:'4.2.5'
+    compile 'org.apache.commons:commons-lang3:3.3.2'
+
+    compile 'com.zaxxer:HikariCP:2.0.1'
+    compile 'org.javassist:javassist:3.18.2-GA'
+
+    compile 'com.microsoft:mssqljdbc:4.0'
+
+    compile 'org.gridgain:gridgain-hibernate:6.1.9'
+}
+
+sourceSets {
+    generated {
+        java {
+            srcDirs = ['src/main/generated']
+        }
+    }
+}
+
+task generateQueryDSL(type: JavaCompile, group: 'build', description: 'Generates the QueryDSL query types') {
+    source = sourceSets.main.java
+    classpath = configurations.compile + configurations.provided
+    options.compilerArgs = [
+            "-proc:only",
+            "-processor", "com.mysema.query.apt.jpa.JPAAnnotationProcessor"
+    ]
+    destinationDir = sourceSets.generated.java.srcDirs.iterator().next()
+}
+
+compileJava {
+    dependsOn generateQueryDSL
+    source sourceSets.generated.java.srcDirs.iterator().next()
+}
+
+compileGeneratedJava {
+    dependsOn generateQueryDSL
+    options.warnings = false
+    classpath += [ sourceSets.main.runtimeClasspath ]
+}
+
+clean {
+    delete sourceSets.generated.java.srcDirs
+}
+
+idea {
+    module {
+        sourceDirs += [ file('src/main/generated') ]
+    }
+}

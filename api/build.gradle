@@ -7,26 +7,142 @@
  * user guide available at http://gradle.org/docs/2.2-20140925220021+0000/userguide/tutorial_java_projects.html
  */
 
-/*
 // Apply the java plugin to add support for Java
-apply plugin: 'java'
+apply plugin: 'base'
 
-// In this section you declare where to find the dependencies of your project
+project.version = '0.1.0-SNAPSHOT'
+project.group = 'com.xyzlast'
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+        maven { url 'http://repo.springsource.org/plugins-release' }
+    }
+    dependencies {
+        classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.7'
+        classpath 'org.codehaus.sonar.runner:sonar-runner-api:2.4'
+    }
+}
+
 repositories {
-    // Use 'jcenter' for resolving your dependencies.
-    // You can declare any Maven/Ivy/file repository here.
+    mavenLocal()
+    mavenCentral()
     jcenter()
+    maven { url 'http://repo.springsource.org/plugins-release' }
 }
 
-// In this section you declare the dependencies for your production and test code
-dependencies {
-    // The production code uses the SLF4J logging API at compile time
-    compile 'org.slf4j:slf4j-api:1.7.7'
-
-    // Declare the dependency for your favourite test framework you want to use in your tests.
-    // TestNG is also supported by the Gradle Test task. Just change the
-    // testCompile dependency to testCompile 'org.testng:testng:6.8.1' and add
-    // 'test.useTestNG()' to your build script.
-    testCompile "junit:junit:4.11"
+ext {
+    javaVersion = "1.8"
+    springVersion = "4.0.6.RELEASE"
+    springjpaVersion = "1.7.0.RELEASE"
+    querydslVersion = "3.3.2"
+    hibernateVersion = "4.3.6.Final"
+    springsecurityVersion = "3.2.4.RELEASE"
 }
-*/
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'jacoco'
+    apply plugin: 'groovy'
+    apply plugin: 'idea'
+    apply plugin: 'propdeps'
+    apply plugin: 'propdeps-maven'
+    apply plugin: 'propdeps-idea'
+    apply plugin: 'propdeps-eclipse'
+
+    compileJava.options.encoding = 'UTF-8'
+    compileTestJava.options.encoding = 'UTF-8'
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        jcenter()
+        maven { url 'http://repo.spring.io/snapshot' }
+        maven { url 'https://github.com/spring-projects/spring-framework' }
+        maven { url "http://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url 'http://repo.spring.io/milestone' }
+        maven { url 'http://download.java.net/maven/2' }
+        maven { url 'https://maven.java.net/content/repositories/releases' }
+        maven { url "http://192.168.13.209:8080/nexus/content/repositories/releases/" }
+        maven { url "http://192.168.13.209:8080/nexus/content/repositories/thirdparty/" }
+    }
+
+    dependencies {
+        compile 'org.slf4j:slf4j-api:1.7.6'
+        compile 'org.slf4j:jcl-over-slf4j:1.7.6'
+        compile 'ch.qos.logback:logback-classic:1.0.13'
+        compile 'ch.qos.logback:logback-core:1.0.13'
+
+        compile "org.springframework:spring-context:${rootProject.ext.springVersion}"
+        compile "org.springframework:spring-context-support:${rootProject.ext.springVersion}"
+        compile "org.springframework:spring-aspects:${rootProject.ext.springVersion}"
+        compile "org.springframework:spring-jdbc:${rootProject.ext.springVersion}"
+        compile "org.springframework:spring-orm:${rootProject.ext.springVersion}"
+
+        compile 'com.google.guava:guava:15.0'
+        compile 'org.aspectj:aspectjrt:1.8.1'
+        compile 'org.aspectj:aspectjtools:1.8.1'
+        compile 'org.aspectj:aspectjweaver:1.8.1'
+        compile 'joda-time:joda-time:2.3'
+
+        compile 'com.fasterxml.jackson.core:jackson-databind:2.4.1.3'
+
+        testCompile "junit:junit:4.11"
+        testCompile 'org.mockito:mockito-core:1.9.5'
+        testCompile 'org.hamcrest:hamcrest-all:1.3'
+        testCompile "org.springframework:spring-test:${rootProject.ext.springVersion}"
+
+        compile "org.codehaus.groovy:groovy-all:2.1.6"
+        testCompile "org.spockframework:spock-core:1.0-groovy-2.0-SNAPSHOT"
+        testCompile "org.spockframework:spock-spring:1.0-groovy-2.0-SNAPSHOT"
+
+        compile 'net.sf.ehcache:ehcache:2.4.3'
+        compile 'net.sf.ehcache:ehcache-core:2.4.3'
+
+        provided 'org.projectlombok:lombok:1.12.6'
+    }
+    sourceCompatibility = rootProject.ext.javaVersion
+    targetCompatibility = rootProject.ext.javaVersion
+    [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+    jacoco {
+        toolVersion = '0.7.2.201409121644'
+        reportsDir = file("${rootProject.buildDir}/reports/codecoverage")
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.destination "${project.buildDir}/reports/codecoverage/result.xml"
+            xml.enabled true
+            csv.enabled false
+            html.destination "${project.buildDir}/reports/codecoverage/html"
+        }
+    }
+
+    test {
+        jacoco {
+            destinationFile = file("${project.buildDir}/jacoco/jacoco.exec")
+            classDumpFile = file("${project.buildDir}/jacoco/classpathdumps")
+            excludes = ['**/entities/**/*']
+            append = true
+        }
+    }
+
+    if (project.hasProperty('target')) {
+        sourceSets {
+            main.resources.srcDirs = ['src/main/resources', "src/main/resources-${project.target}"]
+            test.resources.srcDirs = ['src/test/resources', "src/test/resources-${project.target}"]
+        }
+    } else {
+        String hostname = InetAddress.getLocalHost().getHostName().toLowerCase();
+        if (hostname.endsWith('.local')) {
+            hostname = hostname.replace(".local", '')
+        }
+        sourceSets {
+            main.resources.srcDirs = ['src/main/resources', "src/main/resources-" + hostname]
+            test.resources.srcDirs = ['src/test/resources', "src/test/resources-" + hostname]
+        }
+    }
+}

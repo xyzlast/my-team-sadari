@@ -16,4 +16,7 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'api'
+rootProject.name = 'sadari-api'
+include 'domain'
+include 'rest'
+
