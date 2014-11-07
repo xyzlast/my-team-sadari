@@ -64,6 +64,7 @@ public class DomainConfiguration {
     public static final String CREATE_DROP = "create-drop";
     public static final String CREATE = "create";
     public static final String GRID_CACHE_NAME = "hibernate-grid";
+    public static final String ENTITY_PACKAGE_LOCATION = "me.xyzlast.domain.entities";
 
     @Autowired
     private Environment env;
@@ -95,7 +96,7 @@ public class DomainConfiguration {
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws Exception {
         LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
-        entityManagerFactory.setPackagesToScan("me.xyzlast.domain.entities");
+        entityManagerFactory.setPackagesToScan(ENTITY_PACKAGE_LOCATION);
         entityManagerFactory.setDataSource(dataSource());
         entityManagerFactory.setJpaVendorAdapter(hibernateJpaVendorAdapter());
         entityManagerFactory.setJpaProperties(getHibernateProperties());

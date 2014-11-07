@@ -44,12 +44,12 @@ public class SchemaTest {
         SchemaExport schemaExport = new SchemaExport(configuration);
 
         final boolean printInConsole = true;
-        final boolean executeToDb = false;
+        final boolean executeToDb = true;
         schemaExport.setOutputFile("export.sql");
 
         System.out.println("\n=========== SCHEMA =============\n");
-        schemaExport.create(false, false);
-//        schemaExport.execute(printInConsole, executeToDb, true, true);
+//        schemaExport.create(false, true);
+//        schemaExport.execute(printInConsole, executeToDb, false, true);
         System.out.println("\n========== END SCHEMA ===========\n");
     }
 }

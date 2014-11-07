@@ -13,6 +13,8 @@ import java.util.Date;
 public class Player extends BaseEntity {
     private String name;
     private int defaultAmount;
+    @Transient
+    private int matchCount;
 
     public String getName() {
         return name;
@@ -30,10 +32,37 @@ public class Player extends BaseEntity {
         this.defaultAmount = defaultAmount;
     }
 
+    public int getMatchCount() {
+        return matchCount;
+    }
+
+    public void setMatchCount(int matchCount) {
+        this.matchCount = matchCount;
+    }
+
     @Override
     public String toString() {
         return "Player{" +
                 "name='" + name + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(!(o instanceof Player)) return false;
+        Player player = (Player) o;
+        return id.equals(player.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = name.hashCode();
+        result = 31 * result + defaultAmount + super.hashCode();
+        return result;
+    }
+
+    public int getAmount() {
+        return getDefaultAmount() + getMatchCount();
     }
 }

@@ -13,5 +13,5 @@ import java.util.List;
  */
 @Repository
 public interface GameRepository extends JpaRepository<Game, Long>, QueryDslPredicateExecutor<Game> {
-    List<Game> findByDateBetweenOrderByDateAsc(Date startDate, Date endDate);
+    List<Game> findByDeletedFalseAndDateBetweenOrderByDateAsc(Date startDate, Date endDate);
 }

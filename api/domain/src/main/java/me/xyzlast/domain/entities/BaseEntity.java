@@ -12,13 +12,13 @@ import java.util.Date;
 public class BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    protected Long id;
 
     @Type(type = "yes_no")
-    private boolean deleted;
+    protected boolean deleted;
 
-    private Date createDate;
-    private Date updateDate;
+    protected Date createDate;
+    protected Date updateDate;
 
     public Long getId() {
         return id;
@@ -62,5 +62,18 @@ public class BaseEntity {
     @PreUpdate
     public void setPreUpdate() {
         this.updateDate = new Date();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(this == o) return true;
+        if(!(o instanceof BaseEntity)) return false;
+        BaseEntity that = (BaseEntity) o;
+        return id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

@@ -3,6 +3,7 @@ package me.xyzlast.domain.vo;
 import me.xyzlast.domain.entities.Game;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,9 +11,8 @@ import java.util.stream.Collectors;
  * Created by ykyoon on 14. 11. 6.
  */
 public class DayGameTable {
-    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-    private String date;
+    private Long id;
+    private Date date;
     private String playerNames;
     private String matchPlayerName;
     private String matchNumber;
@@ -24,7 +24,8 @@ public class DayGameTable {
 
     public DayGameTable(Game game) {
         isValid = true;
-        setDate(dateFormat.format(game.getDate()));
+        setId(game.getId());
+        setDate(game.getDate());
         List<String> playerNames = game.getResults().stream()
                 .filter(r -> !r.isDeleted()).map(r -> String.format("%s(%s)", r.getPlayer().getName(), r.getOwnNumber()))
                 .collect(Collectors.toList());
@@ -33,11 +34,19 @@ public class DayGameTable {
         setMatchPlayerName(game.getMatchingPlayer().getName());
     }
 
-    public String getDate() {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -72,10 +81,12 @@ public class DayGameTable {
     @Override
     public String toString() {
         return "DayGameTable{" +
-                "date='" + date + '\'' +
+                "id=" + id +
+                ", date=" + date +
                 ", playerNames='" + playerNames + '\'' +
                 ", matchPlayerName='" + matchPlayerName + '\'' +
                 ", matchNumber='" + matchNumber + '\'' +
+                ", isValid=" + isValid +
                 '}';
     }
 }

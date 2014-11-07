@@ -19,17 +19,19 @@ public class PlayerManagementServiceImpl implements PlayerManagementService {
 
     @Override
     @Transactional(readOnly = false)
-    public Player add(String name) {
+    public Player add(String name, int defaultAmount) {
         Player player = new Player();
         player.setName(name);
+        player.setDefaultAmount(defaultAmount);
         return playerRepository.save(player);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public Player edit(Long id, String name) {
+    public Player edit(Long id, String name, int defaultAmount) {
         Player player = playerRepository.findOne(id);
         player.setName(name);
+        player.setDefaultAmount(defaultAmount);
         return playerRepository.save(player);
     }
 
@@ -42,6 +44,7 @@ public class PlayerManagementServiceImpl implements PlayerManagementService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Player> list() {
         return playerRepository.findAll(new Sort("name"));
     }
