@@ -16,6 +16,14 @@ public class Player extends BaseEntity {
     @Transient
     private int matchCount;
 
+    public Player() {
+
+    }
+
+    public Player(Long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }

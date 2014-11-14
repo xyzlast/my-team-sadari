@@ -1,5 +1,6 @@
 package me.xyzlast.domain.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -17,7 +18,9 @@ public class BaseEntity {
     @Type(type = "yes_no")
     protected boolean deleted;
 
+    @JsonIgnore
     protected Date createDate;
+    @JsonIgnore
     protected Date updateDate;
 
     public Long getId() {

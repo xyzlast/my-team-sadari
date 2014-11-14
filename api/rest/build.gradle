@@ -29,6 +29,9 @@ dependencies {
     compile "org.springframework:spring-websocket:${rootProject.ext.springVersion}"
     compile "org.springframework:spring-messaging:${rootProject.ext.springVersion}"
 
+    compile "javax.el:javax.el-api:2.2.4"
+//    compile "org.glassfish.web:javax.el:2.2.4"
+
     /*
     fileupload components
      */
@@ -51,7 +54,6 @@ dependencies {
     providedCompile 'javax.websocket:javax.websocket-api:1.0'
     providedCompile 'javax.servlet:jsp-api:2.0'
 
-
     def cargoVersion = '1.4.9'
     cargo "org.codehaus.cargo:cargo-core-uberjar:$cargoVersion",
             "org.codehaus.cargo:cargo-ant:$cargoVersion"
@@ -59,7 +61,7 @@ dependencies {
 
 gretty {
     servletContainer = 'tomcat8'
-    contextPath = "fms-api"
+    contextPath = "sadari-api"
     managedClassReload = false
     recompileOnSourceChange = false
     reloadOnClassChange = false

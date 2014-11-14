@@ -14,7 +14,7 @@ module.exports = function (grunt) {
 
   // Time how long tasks take. Can help when optimizing build times
   require('time-grunt')(grunt);
-
+  grunt.loadNpmTasks('grunt-connect-proxy');
   // Configurable paths for the application
   var appConfig = {
     app: require('./bower.json').appPath || 'app',
@@ -71,6 +71,12 @@ module.exports = function (grunt) {
         hostname: 'localhost',
         livereload: 35729
       },
+      proxies: {
+        context: '/sadari-api',
+        host: 'localhost',
+        port: 8080,
+        ws: true
+      },
       livereload: {
         options: {
           open: true,
@@ -81,7 +87,8 @@ module.exports = function (grunt) {
                 '/bower_components',
                 connect.static('./bower_components')
               ),
-              connect.static(appConfig.app)
+              connect.static(appConfig.app),
+              require('grunt-connect-proxy/lib/utils').proxyRequest
             ];
           }
         }
@@ -382,7 +389,7 @@ module.exports = function (grunt) {
     karma: {
       unit: {
         configFile: 'test/karma.conf.js',
-        singleRun: true
+        singleRun: false
       }
     }
   });
@@ -398,6 +405,7 @@ module.exports = function (grunt) {
       'wiredep',
       'concurrent:server',
       'autoprefixer',
+      'configureProxies:server',
       'connect:livereload',
       'watch'
     ]);

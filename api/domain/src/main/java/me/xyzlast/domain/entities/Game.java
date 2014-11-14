@@ -19,6 +19,8 @@ public class Game extends BaseEntity {
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
     private List<PlayerResult> results = new ArrayList<>();
     private String matchingNumber;
+    private long cost;
+    private String description;
 
     public Date getDate() {
         return date;
@@ -42,6 +44,22 @@ public class Game extends BaseEntity {
 
     public void setMatchingNumber(String matchingNumber) {
         this.matchingNumber = matchingNumber;
+    }
+
+    public long getCost() {
+        return cost;
+    }
+
+    public void setCost(long cost) {
+        this.cost = cost;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Player getMatchingPlayer() {

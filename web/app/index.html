@@ -10,6 +10,8 @@
     <!-- bower:css -->
     <!-- endbower -->
     <!-- endbuild -->
+    <link rel="stylesheet" href="library/kendo/src/styles/web/kendo.common.css" />
+    <link rel="stylesheet" href="library/kendo/src/styles/web/kendo.default.css" />
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <!-- endbuild -->
@@ -24,19 +26,21 @@
       <div class="header">
         <ul class="nav nav-pills pull-right">
           <li class="active"><a ng-href="#">Home</a></li>
-          <li><a ng-href="#/about">About</a></li>
-          <li><a ng-href="#">Contact</a></li>
+          <li><a ng-href="#/statistics">통계</a></li>
         </ul>
-        <h3 class="text-muted">sadariInfo</h3>
+        <h3 class="text-muted">나만 아니면되~</h3>
       </div>
-
-      <div ng-view=""></div>
-
+      <div ng-controller="MainCtrl">
+        <div ng-show="messageShown" class="alert alert-{{messageType}}" role="alert">
+          <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+          {{globalMessage}}
+        </div>
+        <div ng-view=""></div>
+      </div>
       <div class="footer">
         <p><span class="glyphicon glyphicon-heart"></span> from the Yeoman team</p>
       </div>
     </div>
-
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
@@ -78,13 +82,23 @@
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/lodash/dist/lodash.compat.js"></script>
+    <script src="bower_components/restangular/dist/restangular.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
-
+    <script src="library/kendo/js/kendo.all.min.js"></script>
+    <script src="library/kendo/js/cultures/kendo.culture.ko-KR.min.js"></script>
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/about.js"></script>
+        <script src="scripts/controllers/calendar.js"></script>
+        <script src="scripts/services/calendarservice.js"></script>
+        <script src="scripts/services/gameservice.js"></script>
+        <script src="scripts/controllers/game/calendar.js"></script>
+        <script src="scripts/controllers/game/day.js"></script>
+        <script src="scripts/controllers/game/edit.js"></script>
+        <script src="scripts/services/gamedatavalidator.js"></script>
         <!-- endbuild -->
 </body>
 </html>

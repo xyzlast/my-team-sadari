@@ -131,12 +131,14 @@ subprojects {
     }
 
     if (project.hasProperty('target')) {
+        //배포시에 사용되는 resource 구성
         sourceSets {
             main.resources.srcDirs = ['src/main/resources', "src/main/resources-${project.target}"]
             test.resources.srcDirs = ['src/test/resources', "src/test/resources-${project.target}"]
         }
     } else {
         String hostname = InetAddress.getLocalHost().getHostName().toLowerCase();
+        //MAC의 경우 hostname의 경우, .local이 붙는다.
         if (hostname.endsWith('.local')) {
             hostname = hostname.replace(".local", '')
         }

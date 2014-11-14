@@ -1,0 +1,48 @@
+<div style="text-align:right">
+  <button type="button" class="btn btn-default" ng-click="back()">뒤로</button>
+  <button type="button" class="btn btn-info" ng-click="save()">저장</button>
+  <button type="button" class="btn btn-danger" ng-click="remove()">삭제</button>
+</div>
+<form class="form-horizontal" role="form">
+  <div class="form-group">
+    <label for="matchingNumber" class="col-sm-2 control-label">날짜</label>
+    <div class="col-sm-10">
+     <input kendo-date-picker k-format="'yyyy-MM-dd'" ng-model="date" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="matchingNumber" class="col-sm-2 control-label">추첨번호</label>
+    <div class="col-sm-10">
+      <input kendo-numeric-text-box k-min="1" k-max="10" k-options="numberOptions" k-ng-model="data.matchingNumber" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="cost" class="col-sm-2 control-label">금액</label>
+    <div class="col-sm-10">
+      <input kendo-numeric-text-box k-min="3000" k-max="30000" k-step="1000" k-options="numberOptions" k-ng-model="data.cost" />
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="cost" class="col-sm-2 control-label">설명</label>
+    <div class="col-sm-10">
+      <textarea class="form-control" rows="3" ng-model="data.description"></textarea>
+    </div>
+  </div>
+
+  <table class="table table-condensed">
+    <thead>
+      <th>참석여부</th>
+      <th>이름</th>
+      <th>선택번호</th>
+    </thead>
+    <tbody>
+      <tr ng-repeat="player in data.players" ng-class="player.ownNumber == data.matchingNumber ? 'success' : 'none'">
+        <td><input type="checkbox" ng-model="player.joined"></td>
+        <td>{{player.player.name}}</td>
+        <td>
+          <input kendo-numeric-text-box k-min="1" k-max="10" k-options="numberOptions" k-ng-model="player.ownNumber" />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>
